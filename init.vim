@@ -1,8 +1,10 @@
 ":::instalacion de plugins:::
-call plug#begin('~/AppData/Local/nvim/plugged') 	"directorio donde se van a instalar los plugins
 
-"plugins
+call plug#begin('~/.config/nvim/plugged') 	"directorio donde se van a instalar los plugins
+
+"PLUGINS
 Plug 'joshdick/onedark.vim' 		"tema onedark
+"Plug 'navarasu/onedark.nvim'
 Plug 'morhetz/gruvbox'              	"tema gruvbox
 Plug 'dracula/vim', { 'as': 'dracula' } "tema dracula
 Plug 'Yggdroot/indentLine' 		"indentacion
@@ -18,80 +20,146 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'jremmen/vim-ripgrep'
-Plug 'airblade/vim-rooter'
-
+Plug 'posva/vim-vue'
+Plug 'arcticicestudio/nord-vim'
+Plug 'caenrique/nvim-toggle-terminal' "TERMINAL
+"""Plug 'yuezk/vim-js'
+Plug 'leafOfTree/vim-vue-plugin'
+Plug 'pangloss/vim-javascript'
+"""Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
+"""Plug 'storyn26383/vim-vue'
+"Plug 'airblade/vim-rooteru'
+Plug 'APZelos/blamer.nvim'
+Plug 'lukas-reineke/indent-blankline.nvim'
 call plug#end() 			"cerramos el llamado de los plugins
 
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 "BUSQUEDA DE PALABRAS EN ARCHIVOS choco install ag 
-let g:ag_prg="<custom-ag-path-goes-here> --column"
+    let g:ag_prg="<custom-ag-path-goes-here> --column"
+    let g:ag_working_path_mode="r"
+    let $FZF_DEFAULT_COMMAND='find . \( -name node_modules -o -name .git  -name vendor \) -prune -o -print'
+    let $FZF_DEFAULT_OPTS="--height 70% --layout=reverse --preview '(highlight -O ansi {} || cat {}) 2> /dev/null | head -500'"
+    let g:fzf_layout = { 'down': '~70%' }
 
-let g:ag_working_path_mode="r"
 
 "CONFIGURACIONES BASICAS 
-set number 				"muestra los numeros de cada linea en la parte izquierda 
-set relativenumber 			"la distribucion de los numeros en lineas de manera relativa
-set mouse=a 				"permite la interaccion con el mouse
-set noshowmode				"me deja de mostrar el modo en el que estamos 'normal, insert, visual, etc'
-syntax enable 				"activa el coloreado de sintaxis en algunos tipos de archivos como html, c, c++
-set encoding=utf-8 			"permite setear la codificación de archivos para aceptar caracteres especiales
-set sw=4 				"la indentación genera 4 espacios
-set nowrap				"el texto en una linea no baja a la siguiente, solo continua en la misma hasta el infinito.
-"set noswapfile				"para evitar el mensaje que sale al abrir algunos archivos sobre swap.
-set clipboard=unnamed			"para poder utilizar el portapapeles del sistema operativo 'esto permite poder copiar y pegar desde cualquier parte a nvim y viceversa.	
+    set number 				"muestra los numeros de cada linea en la parte izquierda 
+    set relativenumber 			"la distribucion de los numeros en lineas de manera relativa
+    set mouse=a 				"permite la interaccion con el mouse
+    set noshowmode				"me deja de mostrar el modo en el que estamos 'normal, insert, visual, etc'
+    syntax enable 				"activa el coloreado de sintaxis en algunos tipos de archivos como html, c, c++
+    set encoding=utf-8 			"permite setear la codificación de archivos para aceptar caracteres especiales
+    set sw=4 				"la indentación genera 4 espacios
+    set nowrap				"el texto en una linea no baja a la siguiente, solo continua en la misma hasta el infinito.
+    "set noswapfile				"para evitar el mensaje que sale al abrir algunos archivos sobre swap.
+    set clipboard=unnamed			"para poder utilizar el portapapeles del sistema operativo 'esto permite poder copiar y pegar desde cualquier parte a nvim y viceversa.	
 
 
-"configuracion del tema
-set termguicolors 			"activa el true color en la terminal
-colorscheme gruvbox "activar el tema onedark
-let g:gruvbox_contrast_dark = 'soft'
-let g:gruvbox_termcolors = '220'
+
+"CONFIGURACIÓN DEL TEMA
+    set termguicolors 			"activa el true color en la terminal
+    let g:onedark_config = {
+        \ 'style': 'darker',
+    \}
+    colorscheme nord "activar el tema onedark
+    let g:gruvbox_contrpast_dark = 'soft'
+    let g:gruvbox_termcolors = '220'
+    hi Normal ctermbg=16 guibg=#181718 
+    hi LineNr ctermbg=16 guibg=#181718
+   "hi Normal guibg=NONE ctermbg=NONE
+
+"CONFIGURACIÓN DE BLAMER PARA GIT
+    """let g:blamer_enabled = 1 "Habilitar
+    """let g:blamer_template = '<committer>, <committer-time> • <summary>'
+    """let g:blamer_show_in_visual_modes = 0
+
+"CONFIGURACIÓN GIT 
+    let g:gitgutter_sign_added = '+'
+    let g:gitgutter_sign_modified = 'M'
+    let g:gitgutter_sign_removed = '-'
+    let g:gitgutter_sign_removed_first_line = '^'
+    let g:gitgutter_sign_modified_removed = '<'
+    let g:gitgutter_override_sign_column_highlight = 1
+    "highlight SignColumn guibg=bg
+    "highlight SignColumn ctermbg=bg 
+
+"AUTOINDENT
+    set autoindent
+    set expandtab
+    set tabstop=4
+    set shiftwidth=4
 
 "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-"configuracion de git 
+"TERMINAL
+    nnoremap <silent> <C-t> :ToggleTerminal<Enter>
+    tnoremap <silent> <C-t> <C-\><C-n>:ToggleTerminal<Enter>    
+    tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
+    " set
+"""autocmd TermEnter term://*toggleterm#*
+  """    \ tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
 
-" Use fontawesome icons as signs
-let g:gitgutter_sign_added = '+'
-let g:gitgutter_sign_modified = '>'
-let g:gitgutter_sign_removed = '-'
-let g:gitgutter_sign_removed_first_line = '^'
-let g:gitgutter_sign_modified_removed = '<'
+" By applying the mappings this way you can pass a count to your
+" mapping to open a specific window.
+" For example: 2<C-t> will open terminal 2
+"""nnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+"""inoremap <silent><c-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>
 
-let g:gitgutter_override_sign_column_highlight = 1
-highlight SignColumn guibg=bg
-highlight SignColumn ctermbg=bg 
-
+let g:vue_disable_pre_processors = 1
+let g:vue_pre_processors = []
+let g:vue_pre_processors = ['pug', 'scss']
 "configuracion de emmet-vim
 let g:user_emmet_leader_key=',' 	"mapeando la tecla lider por una coma, con esto se completa los tag con doble coma.
+let g:vim_vue_plugin_config = { 
+      \'syntax': {
+      \   'template': ['html', 'pug'],
+      \   'script': ['javascript', 'typescript', 'coffee'],
+      \   'style': ['css', 'scss', 'sass', 'less', 'stylus'],
+      \   'i18n': ['json', 'yaml'],
+      \   'route': 'json',
+      \},
+      \'full_syntax': ['json'],
+      \'initial_indent': ['i18n', 'i18n.json', 'yaml'],
+      \'attribute': 1,
+      \'keyword': 1,
+      \'foldexpr': 1,
+      \'debug': 0,
+      \}
+"CONFIGURACIÓN DE VIM-AIRLINE
+    let g:airline#extensions#tabline#enabled = 1	"muestra la linea de pestaña en la que estamos buffer
+    let g:airline#extensions#tabline#formatter = 'unique_tail'	"muestra solo el nombre del archivo que estamos modificando
+    let g:gruvbox_contrast = 'hard'
+    let g:gruvbox_termcolors = '200'
+    let g:airline_theme='gruvbox'	"el tema de airline
 
+"CONFIGURACIÓN DE NERDTREE (SIDEBAR)
+    "mapeando el abrir y cerrar de nerdtree con nerdtreetoggle vemos los archivos en el arbol y podemos cerrarlo a la vez, map es la C mayuscula representa el
+    "control y -n la tecla n lo que indica que realizará la siguiente funcion de excribir el comando NERDTreeToggle y CR significa ENTER.
+    map <C-n> :NERDTreeToggle<CR>
 
-"configuracion de vim-airline
-let g:airline#extensions#tabline#enabled = 1	"muestra la linea de pestaña en la que estamos buffer
-let g:airline#extensions#tabline#formatter = 'unique_tail'	"muestra solo el nombre del archivo que estamos modificando
-let g:gruvbox_contrast = 'hard'
-let g:gruvbox_termcolors = '200'
-let g:airline_theme='gruvbox'	"el tema de airline
-"configuracion de nerdtree
-"mapeando el abrir y cerrar de nerdtree con nerdtreetoggle vemos los archivos en el arbol y podemos cerrarlo a la vez, map es la C mayuscula representa el
-"control y -n la tecla n lo que indica que realizará la siguiente funcion de excribir el comando NERDTreeToggle y CR significa ENTER.
-map <C-n> :NERDTreeToggle<CR>
+"MOVERSE ENTRE PESTAÑAS
+    map <C-y> :bn<CR> 
+    map <C-u> :bN<CR>
 
-"bn y bN para pasar de una pestaña a otra
-map <C-y> :bn<CR> 
-map <C-u> :bN<CR>
-"bdelete para cerrar una pestaña
-map <C-p> :bdelete <CR>
-"w! para forzar el guardo de los archivos
-map <C-s> :w!<CR>
-"u! para deshacer cambios
-map <C-z> :u<CR>
-"redo para rehacer cambios
-map <C-q> :redo<CR>
-map <C-o> :Files<CR>
+"CERRAR PESTAÑAS 
+    map <C-p> :bdelete <CR>
 
-"TextEdit might fail if hidden is not set.
+"GUARDADO FORZADO DE ARCHIVO
+    map <C-s> :w!<CR>
+
+"DESHACER CAMBIOS
+    map <C-z> :u<CR>
+
+"REHACER CAMBIOS
+    map <C-q> :redo<CR>
+
+"BUSQUEDA DE ARCHIVOS
+    map <C-o> :Files<CR>
+    map <C-w> :Ag<CR>
+
+"Buscar palabras dentro de los archivos :Ag
+map <"TextEdit might fail if hidden is not set.
 set hidden
 
 " Some servers have issues with backup files, see #649.
